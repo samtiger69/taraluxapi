@@ -69,14 +69,14 @@ router.post('/create', (req, res, next) => {
             if (!isNull(reqBody.ParentId) && reqBody.ParentId != 0) {
                 request.input('ParentId', reqBody.ParentId);
             }
-            if (isNull(reqBody.ImageIsDefault)) {
-                request.input('ImageIsDefault', 1);
-            } else {
-                request.input('ImageIsDefault', reqBody.ImageIsDefault);
-            }
             request.input('ImageContent', buf);
-            request.input('ImageType', 1);
         }).then((result) => {
+            var spRetVal = result.Data[0].Result;
+            if(spRetVal == 1){
+                result.ErrorType = 3;
+                result.ErrorMessage = 'Parent category does not exist';
+                result.Data = null;
+            }
             res.json(result);
         }).catch((result) => {
             res.json(result);
@@ -97,13 +97,24 @@ router.post('/update', (req, res, next) => {
             request.input('Id', reqBody.Id);
             request.input('NameAr', reqBody.NameAr);
             request.input('NameEn', reqBody.NameEn);
-            if (!isNull(reqBody.ParentId)) {
+            if (!isNull(reqBody.ParentId) && reqBody.ParentId != 0) {
                 request.input('ParentId', reqBody.ParentId);
             }
         }).then((result) => {
+            var spRetVal = result.Data[0].Result;
+            if(spRetVal == 4){
+                result.ErrorType = 4;
+                result.ErrorMessage = 'Parent does not exist';
+                result.Data = null;
+            }
+            if(spRetVal == 3){
+                result.ErrorType = 3;
+                result.ErrorMessage = 'Category does not exist';
+                result.Data = null;
+            }
             res.json(result);
         }).catch((result) => {
-            res.jso(result);
+            res.json(result);
         });
     }
 });

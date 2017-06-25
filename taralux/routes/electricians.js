@@ -43,7 +43,6 @@ router.post('/create', (req, res, next) => {
             request.input('Location', reqBody.Location);
             request.input('Description', reqBody.Description);
             request.input('ImageContent', buf);
-            request.input('ImageType', 3);
             if (isNull(reqBody.ImageIsDefault)) {
                 request.input('ImageIsDefault', 0);
             } else {

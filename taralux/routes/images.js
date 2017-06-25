@@ -57,6 +57,12 @@ router.post('/create', (req, res, next) => {
                 request.input('IsDefault', reqBody.ImageIsDefault);
             }
         }).then((result) => {
+            var spRetVal = result.Data[0].Result;
+            if (spRetVal == -1) {
+                result.ErrorType = -1;
+                result.ErrorMessage = 'Source does not exist';
+                result.Data = null;
+            }
             res.json(result);
         }).catch((result) => {
             res.json(result);
@@ -76,6 +82,17 @@ router.post('/delete', (req, res, next) => {
         db.executePrcedure('Item_Delete', (request) => {
             request.input('Id', reqBody.Id);
         }).then((result) => {
+            var spRetVal = result.Data[0].Result;
+            if (spRetVal == 4) {
+                result.ErrorType = 4;
+                result.ErrorMessage = 'cannot delete default image';
+                result.Data = null;
+            }
+            if (spRetVal == 3) {
+                result.ErrorType = 3;
+                result.ErrorMessage = 'Image does not exist';
+                result.Data = null;
+            }
             res.json(result);
         }).catch((result) => {
             res.json(result);

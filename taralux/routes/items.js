@@ -41,14 +41,14 @@ router.post('/create', (req, res, next) => {
             request.input('NameEn', reqBody.NameEn);
             request.input('CategoryId', reqBody.CategoryId);
             request.input('Price', reqBody.Price);
-            if (isNull(reqBody.ImageIsDefault)) {
-                request.input('ImageIsDefault', 1);
-            } else {
-                request.input('ImageIsDefault', reqBody.ImageIsDefault);
-            }
             request.input('ImageContent', buf);
-            request.input('ImageType', 2);
         }).then((result) => {
+            var spRetVal = result.Data[0].Result;
+            if (spRetVal == 3) {
+                result.ErrorType = 3;
+                result.ErrorMessage = 'Category does not exist';
+                result.Data = null;
+            }
             res.json(result);
         }).catch((result) => {
             res.json(result);
@@ -72,6 +72,17 @@ router.post('/update', (req, res, next) => {
             request.input('CategoryId', reqBody.CategoryId);
             request.input('Price', reqBody.Price);
         }).then((result) => {
+            var spRetVal = result.Data[0].Result;
+            if (spRetVal == 4) {
+                result.ErrorType = 4;
+                result.ErrorMessage = 'Category does not exist';
+                result.Data = null;
+            }
+            if (spRetVal == 3) {
+                result.ErrorType = 3;
+                result.ErrorMessage = 'Item does not exist';
+                result.Data = null;
+            }
             res.json(result);
         }).catch((result) => {
             res.json(result);
@@ -91,6 +102,12 @@ router.post('/delete', (req, res, next) => {
         db.executePrcedure('Item_Delete', (request) => {
             request.input('Id', reqBody.Id);
         }).then((result) => {
+            var spRetVal = result.Data[0].Result;
+            if (spRetVal == 3) {
+                result.ErrorType = 3;
+                result.ErrorMessage = 'Item does not exist';
+                result.Data = null;
+            }
             res.json(result);
         }).catch((result) => {
             res.json(result);
