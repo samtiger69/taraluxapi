@@ -45,7 +45,7 @@ router.post('/create', (req, res, next) => {
         }).then((result) => {
             var spRetVal = result.Data[0].Result;
             if (spRetVal == 3) {
-                result.ErrorType = 3;
+                result.ErrorType = 4;
                 result.ErrorMessage = 'Category does not exist';
                 result.Data = null;
             }
@@ -79,7 +79,7 @@ router.post('/update', (req, res, next) => {
                 result.Data = null;
             }
             if (spRetVal == 3) {
-                result.ErrorType = 3;
+                result.ErrorType = 8;
                 result.ErrorMessage = 'Item does not exist';
                 result.Data = null;
             }
@@ -104,7 +104,7 @@ router.post('/delete', (req, res, next) => {
         }).then((result) => {
             var spRetVal = result.Data[0].Result;
             if (spRetVal == 3) {
-                result.ErrorType = 3;
+                result.ErrorType = 8;
                 result.ErrorMessage = 'Item does not exist';
                 result.Data = null;
             }

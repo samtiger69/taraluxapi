@@ -23,8 +23,8 @@ router.post('/get', (req, res, next) => {
         }).then((result) => {
             if (isNull(result.Data[0])) {
                 res.json({
-                    ErrorType: 3,
-                    ErrorMessage: 'No such image in the database'
+                    ErrorType: 6,
+                    ErrorMessage: 'image does not exist'
                 })
             } else {
                 var img = new Buffer(result.Data[0].Content).toString('base64');
@@ -59,7 +59,7 @@ router.post('/create', (req, res, next) => {
         }).then((result) => {
             var spRetVal = result.Data[0].Result;
             if (spRetVal == -1) {
-                result.ErrorType = -1;
+                result.ErrorType = 8;
                 result.ErrorMessage = 'Source does not exist';
                 result.Data = null;
             }
@@ -84,12 +84,12 @@ router.post('/delete', (req, res, next) => {
         }).then((result) => {
             var spRetVal = result.Data[0].Result;
             if (spRetVal == 4) {
-                result.ErrorType = 4;
+                result.ErrorType = 5;
                 result.ErrorMessage = 'cannot delete default image';
                 result.Data = null;
             }
             if (spRetVal == 3) {
-                result.ErrorType = 3;
+                result.ErrorType = 6;
                 result.ErrorMessage = 'Image does not exist';
                 result.Data = null;
             }

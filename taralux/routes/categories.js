@@ -103,12 +103,12 @@ router.post('/update', (req, res, next) => {
         }).then((result) => {
             var spRetVal = result.Data[0].Result;
             if(spRetVal == 4){
-                result.ErrorType = 4;
+                result.ErrorType = 3;
                 result.ErrorMessage = 'Parent does not exist';
                 result.Data = null;
             }
             if(spRetVal == 3){
-                result.ErrorType = 3;
+                result.ErrorType = 4;
                 result.ErrorMessage = 'Category does not exist';
                 result.Data = null;
             }
