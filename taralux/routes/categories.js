@@ -27,26 +27,26 @@ function isNull(parameter) {
 router.post('/get', (req, res, next) => {
     db.executePrcedure('Category_Get', (request) => {
     }).then((result) => {
-        var root = {
-            Id: -1,
-            NameAr: 'Root Ar',
-            NameEn: 'Root En',
-            ParentId: null,
-            ImageId: -1,
-            Children: []
-        };
-        var i = 0;
-        while (typeof (result.Data[i]) !== 'undefined') {
-            var child = result.Data[i++];
-            if (child.ParentId == null) {
-                root.Children.push(child);
-                formTree(child, result.Data)
-            }
-        }
+        // var root = {
+        //     Id: -1,
+        //     NameAr: 'Root Ar',
+        //     NameEn: 'Root En',
+        //     ParentId: null,
+        //     ImageId: -1,
+        //     Children: []
+        // };
+        // var i = 0;
+        // while (typeof (result.Data[i]) !== 'undefined') {
+        //     var child = result.Data[i++];
+        //     if (child.ParentId == null) {
+        //         root.Children.push(child);
+        //         formTree(child, result.Data)
+        //     }
+        // }
         res.json({
             ErrorType: 0,
             ErrorMessage: 'success',
-            Data: root
+            Data: result.Data
         })
     }).catch((result) => {
         res.json(result);
