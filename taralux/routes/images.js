@@ -10,16 +10,15 @@ function isNull(parameter) {
 }
 
 // get image
-router.post('/get', (req, res, next) => {
-    var reqBody = req.body;
-    if (isNull(reqBody) || isNull(reqBody.Id)) {
+router.get('/get/:id', (req, res, next) => {
+    if (isNull(req.params) || isNull(req.params.id)) {
         res.json({
             ErrorType: 1,
             ErrorMessage: 'empty required field'
         });
     } else {
         db.executePrcedure('Image_Get_By_Id', (request) => {
-            request.input('Id', reqBody.Id);
+            request.input('Id', req.params.id);
         }).then((result) => {
             if (isNull(result.Data[0])) {
                 res.json({
@@ -61,6 +60,40 @@ router.post('/create', (req, res, next) => {
             if (spRetVal == -1) {
                 result.ErrorType = 8;
                 result.ErrorMessage = 'Source does not exist';
+                result.Data = null;
+            }
+            res.json(result);
+        }).catch((result) => {
+            res.json(result);
+        });
+    }
+});
+
+// update image
+router.post('/update', (req, res, next) => {
+    var reqBody = req.body;
+    if (isNull(reqBody) || isNull(reqBody.Id) || isNull(reqBody.SourceId) || isNull(reqBody.Type) || isNull(reqBody.ImageContent)) {
+        res.json({
+            ErrorType: 1,
+            ErrorMessage: 'empty required field'
+        })
+    } else {
+        db.executePrcedure('Image_Update', (request) => {
+            var buf = Buffer.from(reqBody.ImageContent, 'base64');
+            request.input('Id', reqBody.Id);
+            request.input('SourceId', reqBody.SourceId);
+            request.input('Type', reqBody.Type);
+            request.input('Content', buf);
+            if (isNull(reqBody.ImageIsDefault)) {
+                request.input('IsDefault', 0);
+            } else {
+                request.input('IsDefault', reqBody.ImageIsDefault);
+            }
+        }).then((result) => {
+            var spRetVal = result.Data[0].Result;
+            if (spRetVal == -1) {
+                result.ErrorType = 9;
+                result.ErrorMessage = 'image does not exist';
                 result.Data = null;
             }
             res.json(result);

@@ -12,6 +12,7 @@ var images = require('./routes/images');
 var electricians = require('./routes/electricians');
 var electricianComments = require('./routes/electricianComments');
 var bus = require('./routes/bus');
+var email = require('./routes/email');
 var app = express();
 
 
@@ -35,6 +36,7 @@ app.use('/images', images);
 app.use('/electricians', electricians);
 app.use('/electricianComments', electricianComments);
 app.use('/bus', bus);
+app.use('/email', email);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
@@ -52,5 +54,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+app.listen(process.env.PORT || 3000)
 
-module.exports = app;
