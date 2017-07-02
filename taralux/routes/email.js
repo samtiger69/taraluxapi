@@ -13,7 +13,7 @@ var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'samtiger.verify@gmail.com',
-        pass: '5448173a?'
+        pass: '*********'
     }
 });
 
