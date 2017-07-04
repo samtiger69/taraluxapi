@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../services/databaseManager');
-// var mongojs = require('mongojs');
-// var db = mongojs('mongodb://sam:123@ds131621.mlab.com:31621/meantodosam', ['todos']);
 
 function isNull(parameter) {
     if (typeof (parameter) === 'undefined') {
@@ -13,10 +11,24 @@ function isNull(parameter) {
 
 // get electricians
 router.post('/get', (req, res, next) => {
-    var reqBody = req.body;
     db.executePrcedure('Electrician_Get', (request) => {
-        if (!isNull(reqBody) || !isNull(reqBody.Id) && reqBody.Id != 0) {
-            request.input('Id', reqBody.Id)
+        var reqBody = req.body;
+        if (!isNull(reqBody)) {
+            if (!isNull(reqBody.Id)) {
+                request.input('Id', reqBody.Id);
+            }
+            if (!isNull(reqBody.NameEn)) {
+                request.input('NameEn', reqBody.NameEn);
+            }
+            if (!isNull(reqBody.NameAr)) {
+                request.input('NameAr', reqBody.NameAr);
+            }
+            if (!isNull(reqBody.PhoneNumber)) {
+                request.input('PhoneNumber', reqBody.PhoneNumber);
+            }
+            if (!isNull(reqBody.Location)) {
+                request.input('Location', reqBody.Location);
+            }
         }
     }).then((result) => {
         res.json(result);

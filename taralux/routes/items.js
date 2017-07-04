@@ -13,11 +13,19 @@ function isNull(parameter) {
 router.post('/get', (req, res, next) => {
     var reqBody = req.body;
     db.executePrcedure('Item_Get', (request) => {
-        if (!isNull(reqBody.Id)) {
-            request.input('Id', reqBody.Id)
-        }
-        if (!isNull(reqBody.CategoryId)) {
-            request.input('CategoryId', reqBody.CategoryId);
+        if (!isNull(reqBody)) {
+            if (!isNull(reqBody.Id)) {
+                request.input('Id', reqBody.Id)
+            }
+            if (!isNull(reqBody.CategoryId)) {
+                request.input('CategoryId', reqBody.CategoryId);
+            }
+            if (!isNull(reqBody.NameAr)) {
+                request.input('NameAr', reqBody.NameAr);
+            }
+            if (!isNull(reqBody.NameEn)) {
+                request.input('NameEn', reqBody.NameEn);
+            }
         }
     }).then((result) => {
         res.json(result);

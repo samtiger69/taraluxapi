@@ -2,20 +2,6 @@ var express = require('express');
 var router = express.Router();
 var db = require('../services/databaseManager');
 
-function formTree(node, nodes) {
-    if (typeof (node) !== 'undefined') {
-        var i = 0;
-        node.Children = [];
-        while (typeof (nodes[i]) !== 'undefined') {
-            var child = nodes[i++];
-            if (child.ParentId == node.Id) {
-                node.Children.push(child);
-                formTree(child, nodes)
-            }
-        }
-    }
-}
-
 function isNull(parameter) {
     if (typeof (parameter) === 'undefined') {
         return true;
@@ -26,23 +12,22 @@ function isNull(parameter) {
 // get categories
 router.post('/get', (req, res, next) => {
     db.executePrcedure('Category_Get', (request) => {
+        var reqBody = req.body;
+        if( !isNull(reqBody) ){
+            if(!isNull(reqBody.Id)) {
+                request.input('Id', reqBody.Id);
+            }
+            if(!isNull(reqBody.NameEn)) {
+                request.input('NameEn', reqBody.NameEn);
+            }
+            if(!isNull(reqBody.NameAr)) {
+                request.input('NameAr', reqBody.NameAr);
+            }
+            if( !isNull(reqBody.ParentId)) {
+                request.input('ParentId', reqBody.ParentId);
+            }
+        }
     }).then((result) => {
-        // var root = {
-        //     Id: -1,
-        //     NameAr: 'Root Ar',
-        //     NameEn: 'Root En',
-        //     ParentId: null,
-        //     ImageId: -1,
-        //     Children: []
-        // };
-        // var i = 0;
-        // while (typeof (result.Data[i]) !== 'undefined') {
-        //     var child = result.Data[i++];
-        //     if (child.ParentId == null) {
-        //         root.Children.push(child);
-        //         formTree(child, result.Data)
-        //     }
-        // }
         res.json({
             ErrorType: 0,
             ErrorMessage: 'success',
